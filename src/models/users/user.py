@@ -52,11 +52,11 @@ class User(object):
 
         if user_data is not None:
             # Tell user they are already registered
-            print("User has already registered")
+            raise UserErrors.UserAlreadyRegisteredError("User already registered!")
 
         if not Utils.email_is_valid(email):
             # Tell the user email is not constructed properly
-            pass
+            raise UserErrors.InvalidEmailError("Invalid email format!")
 
         User(email, Utils.hash_password(password)).save_to_db()
 

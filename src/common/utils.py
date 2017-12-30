@@ -1,6 +1,10 @@
+import re
+
 from passlib.hash import pbkdf2_sha512
 
 __author__ = "Prajesh Ananthan"
+
+EMAIL_PATTERN = '^[\w-]+@([\w-]+\.)+[\w]+$'
 
 
 class Utils(object):
@@ -25,5 +29,6 @@ class Utils(object):
 
     @staticmethod
     def email_is_valid(email):
-        # TODO: Use regular expression
-        pass
+        # Checks for valid email format
+        email_address_matcher = re.compile(EMAIL_PATTERN)
+        return True if email_address_matcher.match(email) else False
