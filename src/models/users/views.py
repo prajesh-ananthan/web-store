@@ -1,23 +1,50 @@
-from flask import Blueprint
+from flask import Blueprint, request, session, url_for, render_template
+from werkzeug.utils import redirect
+
+import src.models.users.errors as UserErrors
+from src.models.users.user import User
 
 __author__ = "Prajesh Ananthan"
 
 user_blueprint = Blueprint('users', __name__)
 
 
-@user_blueprint.route('/login')
+@user_blueprint.route('/login', methods=['GET', 'POST'])
 def login_user():
-    pass
+    if request.method == 'POST':
+        # Check the login is valid
+        email = request.form['email']
+        password = request.form['hashed']
+
+        try:
+            if User.is_login_valid(email, password):
+                session['email'] = email
+                return redirect(url_for(".user_alerts"))
+        except UserErrors.UserError as e:
+            return e.message
+
+    return render_template("user/login.html")  # Send the user an error when the login fails
 
 
-@user_blueprint.route('/register')
+@user_blueprint.route('/register', methods=['GET', 'POST'])
 def register_user():
-    pass
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['hashed']
+
+        try:
+            if User.register_user(email, password):
+                session['email'] = email
+                return redirect(url_for(".user_alerts"))
+        except UserErrors.UserError as e:
+            return e.message
+
+    return render_template("user/register.html")  # Send the user an error when the login fails
 
 
 @user_blueprint.route('/alerts')
 def user_alerts():
-    pass
+    return "You are now in the alerts page"
 
 
 @user_blueprint.route('/logout')

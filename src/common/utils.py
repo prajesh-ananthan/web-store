@@ -22,3 +22,8 @@ class Utils(object):
         """
 
         return pbkdf2_sha512.verify(password, hashed_password)
+
+    @staticmethod
+    def email_is_valid(email):
+        # TODO: Use regular expression
+        pass
